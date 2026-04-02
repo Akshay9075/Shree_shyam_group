@@ -89,15 +89,42 @@
 
                 <article class="card contact-form" id="contact-form">
                     <h2 class="section-title" style="font-size:1.35rem; margin-bottom:0.9rem;">Send a Message</h2>
-                    <form action="#">
-                        <input type="text" name="name" placeholder="Your Full Name" required>
-                        <input type="tel" name="phone" placeholder="Mobile Number" required>
-                        <input type="email" name="email" placeholder="Email Address" required>
-                        <textarea name="message" placeholder="Write your message here..." required></textarea>
-                        <button type="submit">Submit Enquiry</button>
-                    </form>
+                   <form id="enquiryForm">
+
+                    <input type="text" name="name" placeholder="Your Full Name"
+                    pattern="[A-Za-z ]{3,}" required>
+                
+                    <input type="tel" name="phone" placeholder="Mobile Number"
+                    pattern="[6-9]{1}[0-9]{9}" maxlength="10" required>
+                
+                    <input type="email" name="email" placeholder="Email Address" required>
+                
+                    <textarea name="message" placeholder="Write your message here..."
+                    minlength="10" required></textarea>
+                
+                    <button type="submit">Submit Enquiry</button>
+                
+                  </form>
                 </article>
             </section>
+
+            <div id="popup" style="
+                display:none;
+                position:fixed;
+                top:50%;
+                left:50%;
+                transform:translate(-50%,-50%);
+                background:#fff;
+                padding:25px;
+                box-shadow:0 5px 20px rgba(0,0,0,0.3);
+                border-radius:10px;
+                text-align:center;
+                z-index:999;
+                ">
+                    <h3>✅ Enquiry Submitted!</h3>
+                    <p>We will contact you shortly.</p>
+                    <button onclick="closePopup()">OK</button>
+            </div>
 
             <section class="reveal" style="margin-top:1rem;">
                 <div class="grid-2">
@@ -180,5 +207,34 @@
     </div>
 
     <script src="js/script.js"></script>
+
+    <script>
+        document.getElementById("enquiryForm").addEventListener("submit", function(e){
+            e.preventDefault();
+        
+            let form = this;
+        
+            // Send mail using Formsubmit AJAX
+            fetch("https://formsubmit.co/ajax/kurhepatil012@gmail.com", {
+                method: "POST",
+                body: new FormData(form)
+            })
+            .then(res => res.json())
+            .then(data => {
+                document.getElementById("popup").style.display = "block";
+                form.reset(); // 🔥 form reset
+            })
+            .catch(err => {
+                alert("Something went wrong!");
+            });
+        
+        });
+        
+        // Close popup
+        function closePopup(){
+            document.getElementById("popup").style.display = "none";
+        }
+    </script>
+    
 </body>
 </html>
